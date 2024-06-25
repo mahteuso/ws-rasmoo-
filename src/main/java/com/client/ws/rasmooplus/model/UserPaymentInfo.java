@@ -40,7 +40,7 @@ public class UserPaymentInfo implements Serializable {
     private Long instalments;
 
     @Column(name = "dt_payment")
-    private LocalDateTime dtPayment;
+    private LocalDateTime dtPayment = LocalDateTime.now();
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

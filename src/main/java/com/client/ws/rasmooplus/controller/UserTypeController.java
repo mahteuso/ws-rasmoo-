@@ -1,7 +1,6 @@
 package com.client.ws.rasmooplus.controller;
 
 import com.client.ws.rasmooplus.dto.UserTypeDto;
-import com.client.ws.rasmooplus.exception.NotFoundException;
 import com.client.ws.rasmooplus.model.UserType;
 import com.client.ws.rasmooplus.service.UserTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,22 +18,22 @@ public class UserTypeController {
     private UserTypeService userTypeService;
 
     @GetMapping("/user-type")
-    public ResponseEntity<List<UserType>> listAll(){
+    public ResponseEntity<List<UserType>> listAll() {
         return ResponseEntity.status(HttpStatus.OK).body(userTypeService.findAll());
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<UserType> save(@RequestBody UserTypeDto dto){
+    @PostMapping("/user-type/save")
+    public ResponseEntity<UserType> save(@RequestBody UserTypeDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userTypeService.save(dto));
     }
 
     @GetMapping("/user-type/{id}")
-    public ResponseEntity<UserType> findById(@PathVariable("id") Long id){
+    public ResponseEntity<UserType> findById(@PathVariable("id") Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(userTypeService.findById(id));
+    }
 
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(userTypeService.findById(id));
-        } catch(NotFoundException nf){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    @DeleteMapping("/user-type/delete/{id}")
+    public void delete(@PathVariable("id") Long id) {
+        userTypeService.delete(id);
     }
 }

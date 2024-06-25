@@ -12,7 +12,7 @@ public interface UserTypeService {
 
     UserType save(UserTypeDto dto);
 
-    UserType update(UserType userType, Long id);
+    UserType update(UserTypeDto dto, Long id);
 
     UserType findById(Long id);
 
