@@ -3,6 +3,7 @@ package com.client.ws.rasmooplus.service.impl;
 import com.client.ws.rasmooplus.dto.UserTypeDto;
 import com.client.ws.rasmooplus.exception.BadRequestException;
 import com.client.ws.rasmooplus.exception.NotFoundException;
+import com.client.ws.rasmooplus.mapper.UserTypeMapper;
 import com.client.ws.rasmooplus.model.UserType;
 import com.client.ws.rasmooplus.repository.UserTypeRepository;
 import com.client.ws.rasmooplus.service.UserTypeService;
@@ -28,30 +29,24 @@ public class UserTypeServiceImpl implements UserTypeService {
 
     @Override
     public UserType save(UserTypeDto dto) {
-        return userTypeRepository.save(UserType.builder()
-                .id(dto.getId())
-                .name(dto.getName())
-                .description(dto.getDescription())
-                .build());
+        return userTypeRepository.save(UserTypeMapper.fromDtoToEntity(dto));
     }
 
     @Override
     public UserType update(UserTypeDto dto, Long id) {
         Optional<UserType> opt = userTypeRepository.findById(id);
-        if (opt.isEmpty()){
+        if (opt.isEmpty()) {
             throw new BadRequestException("Id must be valid");
         }
-        return userTypeRepository.save(UserType.builder()
-                .name(dto.getName())
-                .description(dto.getDescription())
-                .build());
+        dto.setId(id);
+        return userTypeRepository.save(UserTypeMapper.fromDtoToEntity(dto));
     }
 
     @Override
     public UserType findById(Long id) {
         Optional<UserType> opt = userTypeRepository.findById(id);
         if (opt.isEmpty()) {
-            throw new BadRequestException("UserType not exists");
+            throw new NotFoundException("UserType not exists");
         }
         return opt.get();
     }

@@ -18,6 +18,7 @@ public class UserPaymentInfoDto {
 
     private Long id;
 
+
     private String cardNumber;
 
     private Long cardExpirationMonth;

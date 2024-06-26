@@ -3,6 +3,7 @@ package com.client.ws.rasmooplus.service.impl;
 import com.client.ws.rasmooplus.dto.UserPaymentInfoDto;
 import com.client.ws.rasmooplus.exception.BadRequestException;
 import com.client.ws.rasmooplus.exception.NotFoundException;
+import com.client.ws.rasmooplus.mapper.UserPaymentInfoMapper;
 import com.client.ws.rasmooplus.model.UserPaymentInfo;
 import com.client.ws.rasmooplus.repository.UserPaymentInfoRepository;
 import com.client.ws.rasmooplus.service.UserPaymentInfoService;
@@ -39,16 +40,7 @@ public class UserPaymentInfoServicesImpl implements UserPaymentInfoService {
     @Override
     public UserPaymentInfo save(UserPaymentInfoDto dto) {
 
-        return userPaymentInfoRepository.save(UserPaymentInfo.builder()
-                .cardNumber(dto.getCardNumber())
-                .cardExpirationMonth(dto.getCardExpirationMonth())
-                .cardExpirationYear(dto.getCardExpirationYear())
-                .cardSecurityCode(dto.getCardSecurityCode())
-                .price(dto.getPrice())
-                .instalments(dto.getInstalments())
-                .dtPayment(dto.getDtPayment())
-                .user(dto.getUser())
-                .build());
+        return userPaymentInfoRepository.save(UserPaymentInfoMapper.fromDtoToEntity(dto));
     }
 
     @Override
@@ -57,17 +49,8 @@ public class UserPaymentInfoServicesImpl implements UserPaymentInfoService {
         if (opt.isEmpty()) {
             throw new BadRequestException("Id must be valid.");
         }
-        return userPaymentInfoRepository.save(UserPaymentInfo.builder()
-                .id(dto.getId())
-                .cardNumber(dto.getCardNumber())
-                .cardExpirationMonth(dto.getCardExpirationMonth())
-                .cardExpirationYear(dto.getCardExpirationYear())
-                .cardSecurityCode(dto.getCardSecurityCode())
-                .price(dto.getPrice())
-                .instalments(dto.getInstalments())
-                .dtPayment(dto.getDtPayment())
-                .user(dto.getUser())
-                .build());
+        dto.setId(id);
+        return userPaymentInfoRepository.save(UserPaymentInfoMapper.fromDtoToEntity(dto));
     }
 
     @Override

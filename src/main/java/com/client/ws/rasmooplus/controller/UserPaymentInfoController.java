@@ -41,7 +41,7 @@ public class UserPaymentInfoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userPaymentInfoService.save(dto));
     }
 
-    @PostMapping("/user-payment-info/update/{id}")
+    @PutMapping("/user-payment-info/update/{id}")
     public ResponseEntity<UserPaymentInfo> update(@RequestBody UserPaymentInfoDto dto, @PathVariable("id") long id){
         return ResponseEntity.status(HttpStatus.OK).body(userPaymentInfoService.update(dto, id));
     }

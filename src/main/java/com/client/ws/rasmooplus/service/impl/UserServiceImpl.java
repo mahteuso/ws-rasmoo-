@@ -3,6 +3,7 @@ package com.client.ws.rasmooplus.service.impl;
 import com.client.ws.rasmooplus.dto.UserDto;
 import com.client.ws.rasmooplus.exception.BadRequestException;
 import com.client.ws.rasmooplus.exception.NotFoundException;
+import com.client.ws.rasmooplus.mapper.UserMapper;
 import com.client.ws.rasmooplus.model.User;
 import com.client.ws.rasmooplus.repository.UserRepository;
 import com.client.ws.rasmooplus.service.UserService;
@@ -32,16 +33,7 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException("Id must be null");
         }
 
-        return userRepository.save(User.builder()
-                .name(dto.getName())
-                .email(dto.getEmail())
-                .phone(dto.getPhone())
-                .cpf(dto.getCpf())
-                .dtSubscription(dto.getDtSubscription())
-                .dtExpiration(dto.getDtExpiration())
-                .subscriptionsType(dto.getSubscriptionsType())
-                .subscriptionsType(dto.getSubscriptionsType())
-                .build());
+        return userRepository.save(UserMapper.fromDtoToEntity(dto));
     }
 
     @Override
@@ -50,17 +42,8 @@ public class UserServiceImpl implements UserService {
         if (opt.isEmpty()) {
             throw new BadRequestException("User not exist.");
         }
-        return userRepository.save(User.builder()
-                .id(dto.getId())
-                .name(dto.getName())
-                .email(dto.getEmail())
-                .phone(dto.getPhone())
-                .cpf(dto.getCpf())
-                .dtSubscription(dto.getDtSubscription())
-                .dtExpiration(dto.getDtExpiration())
-                .userType(dto.getUserType())
-                .subscriptionsType(dto.getSubscriptionsType())
-                .build());
+        dto.setId(id);
+        return userRepository.save(UserMapper.fromDtoToEntity(dto));
     }
 
     @Override
