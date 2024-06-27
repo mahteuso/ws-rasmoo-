@@ -5,7 +5,9 @@ import com.client.ws.rasmooplus.exception.BadRequestException;
 import com.client.ws.rasmooplus.exception.NotFoundException;
 import com.client.ws.rasmooplus.mapper.UserMapper;
 import com.client.ws.rasmooplus.model.User;
+import com.client.ws.rasmooplus.model.UserType;
 import com.client.ws.rasmooplus.repository.UserRepository;
+import com.client.ws.rasmooplus.repository.UserTypeRepository;
 import com.client.ws.rasmooplus.service.UserService;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +19,11 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserTypeRepository userTypeRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserTypeRepository userTypeRepository) {
         this.userRepository = userRepository;
+        this.userTypeRepository = userTypeRepository;
     }
 
     @Override
@@ -33,7 +37,15 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException("Id must be null");
         }
 
-        return userRepository.save(UserMapper.fromDtoToEntity(dto));
+        Optional<UserType> optUserType = userTypeRepository.findById(dto.getUserTypeId());
+
+        if (optUserType.isEmpty()){
+            throw new NotFoundException("UserType id not found");
+        }
+        UserType userType = optUserType.get();
+        User user = UserMapper.fromDtoToEntity(dto, userType, null);
+
+        return userRepository.save(user);
     }
 
     @Override
@@ -42,8 +54,14 @@ public class UserServiceImpl implements UserService {
         if (opt.isEmpty()) {
             throw new BadRequestException("User not exist.");
         }
+        Optional<UserType> optUserType = userTypeRepository.findById(id);
+        if (optUserType.isEmpty()){
+            throw new NotFoundException("Id not found.");
+        }
+        UserType userType = optUserType.get();
+        User user = UserMapper.fromDtoToEntity(dto, userType, null);
         dto.setId(id);
-        return userRepository.save(UserMapper.fromDtoToEntity(dto));
+        return userRepository.save(user);
     }
 
     @Override
